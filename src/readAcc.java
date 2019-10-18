@@ -5,15 +5,17 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class readAcc {
+    private static List<InfoAcc> nameList = new ArrayList();
 
-    //private static List<String> nameList = new ArrayList<String>();
     public static void collectData2(){
 
         final String url = "https://github.com/STIW3054-A191/Main-Issues/issues/1";
@@ -21,49 +23,64 @@ public class readAcc {
         try {
             final Document doc = Jsoup.connect(url).get();
 
-            for (Element row : doc.select("table.d-block tr")) {
-                if (row.select("p").text().equals("")) {
-                    continue;
-                } else {
-                    final String info = row.select("p").text();
-                    //System.out.println(info);
-                    String str = info;
-                    List<String> nameList = new ArrayList<String>();
-                    String[] strArray = str.split("Name:|Matric:|Link:|Name : |Matric :|Link : |Matric No : |Name |name : |matrix :|link:|Matric no:");
-                    for(String word : strArray) {
-                        nameList.add(word);
-                    }
-                    System.out.println(nameList);
+            Elements table = doc.select("td.d-block.comment-body.markdown-body.js-comment-body");
+
+            for (Element tableData : table) {
+                String info = tableData.getElementsMatchingOwnText("\\d{5,6}").text();
+                String Gmatric;
+
+                Pattern matricPattern = Pattern.compile("(\\d{5,6})");
+                Matcher m1 = matricPattern.matcher(info);
+                if ((m1.find())) {
+                    Gmatric = m1.group(1);
+
+                int linkIndex = info.lastIndexOf("ink");
+                int nameIndex = info.lastIndexOf("ame");
+
+                String Gname1 = null;
+                try {
+                    Gname1 = info.substring(nameIndex + 3, linkIndex - 1).replace(':', ' ').trim();
+                } catch (Exception e) {
+                    System.out.println("");
+                }
+
+                String Glink = null;
+                try {
+                    Glink = info.substring(linkIndex + 3).replace(':', ' ').trim();
+                } catch (Exception e) {
+                    System.out.println();
+                }
+
+                    nameList.add(new InfoAcc(Gmatric, Gname1, Glink));
                 }
             }
+            } catch(Exception ex){
+                System.out.println("");
+            }
 
-        } catch (Exception ex) {
-            ex.printStackTrace();
         }
 
-    }
-
-    /*public static void toExcel() {
+    public static void toExcel() {
 
         if (nameList.isEmpty()) {
             System.out.println("No data to  write");
             System.exit(0);
         }
-        String excelFile = "List of Student.xls";
+        String excelFile = "List of Github Account.xls";
         System.out.println("\nwriting the" +excelFile+"...");
 
         HSSFWorkbook workbook = new HSSFWorkbook();
-        HSSFSheet sheet = workbook.createSheet("List of Students");
+        HSSFSheet sheet = workbook.createSheet("List of Github Account");
 
         try{
             for(int i =0; i<nameList.size();i++) {
                 HSSFRow row = sheet.createRow(i);
                 HSSFCell cell1 = row.createCell(0);
-                cell1.setCellValue((nameList.spliterator());
-                //HSSFCell cell2 = row.createCell(1);
-                //cell2.setCellValue(dataRecord.get(i).getMatric());
-               // HSSFCell cell3 = row.createCell(2);
-               // cell3.setCellValue(dataRecord.get(i).getName());
+                cell1.setCellValue(nameList.get(i).getMatric());
+                HSSFCell cell2 = row.createCell(1);
+                cell2.setCellValue(nameList.get(i).getName());
+                HSSFCell cell3 = row.createCell(2);
+                cell3.setCellValue(nameList.get(i).getLink());
             }
             FileOutputStream outputFile = new FileOutputStream(excelFile);
             workbook.write(outputFile);
@@ -73,10 +90,10 @@ public class readAcc {
         } catch (IOException e){
             System.out.println("Error : Failed to write the file");
         }
-    }*/
+    }
 
     public static void main(String [] args){
         collectData2();
-        //toExcel();
+        toExcel();
     }
 }
