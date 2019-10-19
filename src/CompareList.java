@@ -22,27 +22,32 @@ public class CompareList {
         HSSFSheet ws2 = wb2.getSheet("List of Github Account");
         int rowCount2 = ws2.getPhysicalNumberOfRows();
 
-        for (int i = 1; i < rowCount1; i++) {
-            HSSFRow row1 = ws1.getRow(i);
+        if(rowCount1!=rowCount2) {
+            for (int i = 1; i < rowCount1; i++) {
 
-            String matric1 = "";
-            HSSFCell id1 = row1.getCell(1);
-            if (id1 != null) {
-                id1.setCellType(CellType.STRING);
-                matric1 = id1.getStringCellValue();
+                HSSFRow row1 = ws1.getRow(i);
+                HSSFRow row2 = ws2.getRow(i);
+
+                String matric1 = "";
+                HSSFCell id1 = row1.getCell(1);
+                if (id1 != null) {
+                    id1.setCellType(CellType.STRING);
+                    matric1 = id1.getStringCellValue().trim();
+
+                    String matric2 = "";
+                    HSSFCell id2 = row2.getCell(0);
+                    if (id2 != null) {
+                        id2.setCellType(CellType.STRING);
+                        matric2 = id2.getStringCellValue().trim();
+                    }
+                    if(matric1.compareTo(matric2)<0){
+                        System.out.println( "Difference for Github" +matric2);
+                    }
+                }
             }
         }
 
-            for (int j = 1; j < rowCount2; j++) {
-                HSSFRow row2 = ws2.getRow(j);
 
-                String matric2 = "";
-                HSSFCell id1 = row2.getCell(0);
-                if (id1 != null) {
-                    id1.setCellType(CellType.STRING);
-                    matric2 = id1.getStringCellValue();
+        }
 
-                }
-            }
-    }
 }
