@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 public class readAcc {
     private static List<InfoAcc> nameList = new ArrayList();
 
-    public static void collectData2(){
+    public static List<InfoAcc> collectData2(){
 
         final String url = "https://github.com/STIW3054-A191/Main-Issues/issues/1";
 
@@ -27,12 +27,12 @@ public class readAcc {
 
             for (Element tableData : table) {
                 String info = tableData.getElementsMatchingOwnText("\\d{5,6}").text();
-                String Gmatric;
+                String matric;
 
                 Pattern matricPattern = Pattern.compile("(\\d{5,6})");
                 Matcher m1 = matricPattern.matcher(info);
                 if ((m1.find())) {
-                    Gmatric = m1.group(1);
+                    matric = m1.group(1);
 
                 int linkIndex = info.lastIndexOf("ink");
                 int nameIndex = info.lastIndexOf("ame");
@@ -51,12 +51,14 @@ public class readAcc {
                     System.out.println();
                 }
 
-                    nameList.add(new InfoAcc(Gmatric, Gname1, Glink));
+                    nameList.add(new InfoAcc(matric, Gname1, Glink));
                 }
             }
             } catch(Exception ex){
                 System.out.println("");
             }
+
+        return nameList;
 
         }
 
