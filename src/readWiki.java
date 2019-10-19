@@ -2,27 +2,19 @@ import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.xssf.usermodel.XSSFCell;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.jsoup.nodes.CDataNode;
 import org.jsoup.nodes.Document;
 import  org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 
-import javax.swing.*;
-import java.awt.*;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.BitSet;
 import java.util.List;
 
 public class readWiki {
    private static List<InfoWiki> dataRecord = new ArrayList();
 
-    public static void collectData() {
+    public static List<InfoWiki> collectData() {
 
         final String url = "https://github.com/STIW3054-A191/Assignments/wiki/List_of_Student";
 
@@ -39,12 +31,14 @@ public class readWiki {
 
                     dataRecord.add(new InfoWiki(no, matric, name));
                     System.out.println(no + "\t" + matric + "\t" + name);
+
                 }
             };
 
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+        return dataRecord;
     }
 
     public static void toExcel() {

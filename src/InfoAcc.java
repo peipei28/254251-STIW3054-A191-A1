@@ -1,22 +1,22 @@
 public class InfoAcc {
 
-    private String Gmatric;
+    private String matric;
     private String Gname1;
     private String Glink;
 
 
-    public InfoAcc(String Gmatric,String Gname1,String Glink){
-        this.Gmatric=Gmatric;
+    public InfoAcc(String matric,String Gname1,String Glink){
+        this.matric=matric;
         this.Gname1=Gname1;
         this.Glink=Glink;
     }
 
-    public void setMatric(String Gmatric){
-        this.Gmatric=Gmatric;
+    public void setMatric(String matric){
+        this.matric=matric;
     }
 
     public String getMatric(){
-        return Gmatric;
+        return matric;
 
     }
 

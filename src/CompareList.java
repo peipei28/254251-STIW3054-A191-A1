@@ -12,7 +12,19 @@ public class CompareList {
 
     public static void main (String args [])throws IOException {
 
-        FileInputStream file1 = new FileInputStream("List of Student.xls");
+        readWiki file1 = new readWiki();
+        readAcc file2 = new readAcc();
+
+        for (InfoWiki matric : file1.collectData()) {
+            if (!file2.contains(matric)) {
+                System.out.println("Absent List : " + matric);
+            }
+        }
+    }
+    }
+
+
+        /*FileInputStream file1 = new FileInputStream("List of Student.xls");
         HSSFWorkbook wb1 = new HSSFWorkbook(file1);
         HSSFSheet ws1 = wb1.getSheet("List of Students");
         int rowCount1 = ws1.getPhysicalNumberOfRows();
@@ -45,9 +57,9 @@ public class CompareList {
                     }
                 }
             }
-        }
+        }*/
 
 
-        }
 
-}
+
+
